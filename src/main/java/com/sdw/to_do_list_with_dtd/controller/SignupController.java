@@ -1,6 +1,6 @@
 package com.sdw.to_do_list_with_dtd.controller;
 
-import com.sdw.to_do_list_with_dtd.dto.signupDTO;
+import com.sdw.to_do_list_with_dtd.dto.SignupDto;
 import com.sdw.to_do_list_with_dtd.model.User;
 import com.sdw.to_do_list_with_dtd.repository.UserRepository;
 import jakarta.validation.Valid;
@@ -19,14 +19,14 @@ public class SignupController {
 
     @GetMapping("/signup")
     public String showSignup(Model model) {
-        model.addAttribute("signupDto", new signupDTO());
+        model.addAttribute("signupDto", new SignupDto());
 
         return "signup";
     }
 
     @PostMapping("/signup")
     public String doSignup(
-            @Valid @ModelAttribute("signupDto") signupDTO signupDTO,
+            @Valid @ModelAttribute("signupDto") SignupDto signupDTO,
             BindingResult bindingResult,
             Model model
     ) {
