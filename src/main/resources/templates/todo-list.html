@@ -26,6 +26,7 @@
           <td th:text="${todo.title}"></td>
           <td th:text="${todo.completed}"></td>
           <td>
+              <a th:href="@{'/todos/edit/' + ${todo.id}}">수정</a>
               <form th:action="@{'/todos/delete/' + ${todo.id}}" method="post" style="display:inline;">
                   <button type="submit">삭제</button>
               </form>

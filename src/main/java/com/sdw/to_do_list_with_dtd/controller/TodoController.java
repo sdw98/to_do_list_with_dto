@@ -68,11 +68,54 @@ public class TodoController {
         return "redirect:/todos";
     }
 
+    @GetMapping("/edit/{id}")
+    public String editForm(
+        @PathVariable int id,
+        Model model,
+        HttpSession httpSession
+    ) {
+        User user = getCurrentUser(httpSession);
+
+        if (user == null) return "redirect:/login";
+
+        Todo todo = todoRepository.findByIdAndUserId(id, user.getId());
+        TodoDto dto = new TodoDto();
+        dto.setId(todo.getId());
+        dto.setTitle(todo.getTitle());
+        dto.setCompleted(todo.isCompleted());
+
+        model.addAttribute("todoDto", dto);
+
+        return "todo-form";
+    }
+
+    @PostMapping("/edit")
+    public String edit(
+            @Valid @ModelAttribute TodoDto todoDto,
+            BindingResult bindingResult,
+            HttpSession httpSession
+    ) {
+        if(bindingResult.hasErrors()) return "todo-form";
+
+        User user = getCurrentUser(httpSession);
+        Todo todo = Todo.builder()
+                .id(todoDto.getId())
+                .title(todoDto.getTitle())
+                .completed(todoDto.isCompleted())
+                .userId(user.getId())
+                .build();
+
+        todoRepository.update(todo);
+
+        return "redirect:/todos";
+    }
+
     @PostMapping("/delete/{id}")
     public String delete(
             @PathVariable int id,
             HttpSession httpSession
     ) {
+
         User user = getCurrentUser(httpSession);
         todoRepository.deleteByIdAndUserId(id, user.getId());
 
