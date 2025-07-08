@@ -24,6 +24,12 @@ public class TodoRepository {
         return todo;
     };
 
+    public List<Todo> findAllByUserId(int userId) {
+        String sql = "SELECT * FROM todo WHERE user_id = ? ORDER BY id";
+
+        return jdbcTemplate.query(sql, todoRowMapper, userId);
+    }
+
     public int save(Todo todo) {
         String sql = "INSERT INTO todo (user_id, title, completed) VALUES (?, ?, ?)";
 
@@ -35,5 +41,7 @@ public class TodoRepository {
 
         return jdbcTemplate.query(sql, todoRowMapper, userId);
     }
+
+
 
 }

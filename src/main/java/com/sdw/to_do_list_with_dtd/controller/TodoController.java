@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/todos")
 @RequiredArgsConstructor
@@ -26,12 +28,15 @@ public class TodoController {
     }
 
     @GetMapping
-    public String list(HttpSession httpSession) {
+    public String list(HttpSession httpSession, Model model) {
         User user = getCurrentUser(httpSession);
 
         if(user == null) {
             return "redirect:/login";
         }
+
+        List<Todo> list = todoRepository.findAllByUserId(user.getId());
+        model.addAttribute("todos", list);
 
         return "todo-list";
     }
